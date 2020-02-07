@@ -1,6 +1,19 @@
 #include <raylib.h>
 #include <stdio.h>
 
+#define RLIGHTS_IMPLEMENTATION
+#include "rlights.h"
+
+#include "game.h"
+#include "map.h"
+#include "assets.h"
+
+#if defined(PLATFORM_DESKTOP)
+#define GLSL_VERSION 330
+#else
+#define GLSL_VERSION 100
+#endif
+
 #define SCREEN_WIDTH (1280)
 #define SCREEN_HEIGHT ((SCREEN_WIDTH) * (160.0 / 240.0))
 #define MAX_COLUMNS (20)
@@ -10,55 +23,57 @@ void custom_logger(int msg_type, const char *text, va_list args) {
 }
 
 int main() {
-    SetConfigFlags(FLAG_WINDOW_RESIZABLE); 
-    SetTraceLogLevel(0);
-    SetTraceLogCallback(custom_logger);
+    SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT); 
+    //SetTraceLogLevel(0);
+    //SetTraceLogCallback(custom_logger);
 
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "DevWindow");
     SetTargetFPS(60);
 
     // Define the camera to look into our 3d world (position, target, up vector)
     Camera camera = { 0 };
-    camera.position = (Vector3){ 4.0f, 2.0f, 4.0f };
+    camera.position = (Vector3){ 10.0f, 1.0f, 20.0f };
     camera.target = (Vector3){ 0.0f, 1.8f, 0.0f };
     camera.up = (Vector3){ 0.0f, 1.0f, 0.0f };
-    camera.fovy = 60.0f;
+    camera.fovy = 75.0f;
     camera.type = CAMERA_PERSPECTIVE;
 
-    // Generates some random columns
-    float heights[MAX_COLUMNS] = { 0.0f };
-    Vector3 positions[MAX_COLUMNS] = { 0 };
-    Color colors[MAX_COLUMNS] = { 0 };
+    Assets* assets = create_and_load_assets();
+    Game* game = create_game(assets, &camera);
 
-    for (int i = 0; i < MAX_COLUMNS; i++)
-    {
-        heights[i] = (float)GetRandomValue(1, 12);
-        positions[i] = (Vector3){ GetRandomValue(-15, 15), heights[i]/2, GetRandomValue(-15, 15) };
-        colors[i] = (Color){ GetRandomValue(20, 255), GetRandomValue(10, 55), 30, 255 };
+    Shader* shader = &assets->shaders[SHADER_PHONG_LIGHTING];
+    shader->locs[LOC_MATRIX_MODEL] = GetShaderLocation(*shader, "matModel");
+    shader->locs[LOC_VECTOR_VIEW] = GetShaderLocation(*shader, "viewPos");
+
+    int ambientLoc = GetShaderLocation(*shader, "ambient");
+    SetShaderValue(*shader, ambientLoc, (float[4]){0.2f, 0.2f, 0.2f, 1.0f}, UNIFORM_VEC4);
+
+    // Using 4 point lights, white, red, green and blue
+    Light lights[MAX_LIGHTS] = { 0 };
+    lights[0] = CreateLight(LIGHT_POINT, (Vector3){ -10, 0, -10 }, (Vector3){0}, WHITE, *shader);
+
+    for (int i = 0; i < MAX_LIGHTS; i++) {
+        UpdateLightValues(*shader, lights[i]);
     }
+
+    Map* map = load_map(0, game);
 
     SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
 
-
-    while (!WindowShouldClose()) {
+    while (!WindowShouldClose() && game->state == STATE_RUNNING) {
         UpdateCamera(&camera);                  // Update camera
+
+        update_map(map);
+
+        for (int i = 0; i < MAX_LIGHTS; i++) {
+            lights[i].position = camera.position;
+            UpdateLightValues(*shader, lights[i]);
+        }
         
         BeginDrawing();
-            ClearBackground(RAYWHITE);
+            ClearBackground(BLACK);
             BeginMode3D(camera);
-
-                DrawPlane((Vector3){ 0.0f, 0.0f, 0.0f }, (Vector2){ 32.0f, 32.0f }, LIGHTGRAY); // Draw ground
-                DrawCube((Vector3){ -16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, BLUE);     // Draw a blue wall
-                DrawCube((Vector3){ 16.0f, 2.5f, 0.0f }, 1.0f, 5.0f, 32.0f, LIME);      // Draw a green wall
-                DrawCube((Vector3){ 0.0f, 2.5f, 16.0f }, 32.0f, 5.0f, 1.0f, GOLD);      // Draw a yellow wall
-
-                // Draw some cubes around
-                for (int i = 0; i < MAX_COLUMNS; i++)
-                {
-                    DrawCube(positions[i], 2.0f, heights[i], 2.0f, colors[i]);
-                    DrawCubeWires(positions[i], 2.0f, heights[i], 2.0f, MAROON);
-                }
-
+                draw_map(map);
             EndMode3D();
 
         EndDrawing();

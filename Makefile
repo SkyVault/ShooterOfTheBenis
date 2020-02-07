@@ -123,6 +123,33 @@ Harp.exe/fast:
 	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/build
 .PHONY : Harp.exe/fast
 
+src/assets.o: src/assets.c.o
+
+.PHONY : src/assets.o
+
+# target to build an object file
+src/assets.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/assets.c.o
+.PHONY : src/assets.c.o
+
+src/assets.i: src/assets.c.i
+
+.PHONY : src/assets.i
+
+# target to preprocess a source file
+src/assets.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/assets.c.i
+.PHONY : src/assets.c.i
+
+src/assets.s: src/assets.c.s
+
+.PHONY : src/assets.s
+
+# target to generate assembly for a file
+src/assets.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/assets.c.s
+.PHONY : src/assets.c.s
+
 src/components.o: src/components.c.o
 
 .PHONY : src/components.o
@@ -177,6 +204,33 @@ src/ecs.c.s:
 	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/ecs.c.s
 .PHONY : src/ecs.c.s
 
+src/game.o: src/game.c.o
+
+.PHONY : src/game.o
+
+# target to build an object file
+src/game.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/game.c.o
+.PHONY : src/game.c.o
+
+src/game.i: src/game.c.i
+
+.PHONY : src/game.i
+
+# target to preprocess a source file
+src/game.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/game.c.i
+.PHONY : src/game.c.i
+
+src/game.s: src/game.c.s
+
+.PHONY : src/game.s
+
+# target to generate assembly for a file
+src/game.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/game.c.s
+.PHONY : src/game.c.s
+
 src/main.o: src/main.c.o
 
 .PHONY : src/main.o
@@ -204,6 +258,87 @@ src/main.c.s:
 	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/main.c.s
 .PHONY : src/main.c.s
 
+src/map.o: src/map.c.o
+
+.PHONY : src/map.o
+
+# target to build an object file
+src/map.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/map.c.o
+.PHONY : src/map.c.o
+
+src/map.i: src/map.c.i
+
+.PHONY : src/map.i
+
+# target to preprocess a source file
+src/map.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/map.c.i
+.PHONY : src/map.c.i
+
+src/map.s: src/map.c.s
+
+.PHONY : src/map.s
+
+# target to generate assembly for a file
+src/map.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/map.c.s
+.PHONY : src/map.c.s
+
+src/maths.o: src/maths.c.o
+
+.PHONY : src/maths.o
+
+# target to build an object file
+src/maths.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/maths.c.o
+.PHONY : src/maths.c.o
+
+src/maths.i: src/maths.c.i
+
+.PHONY : src/maths.i
+
+# target to preprocess a source file
+src/maths.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/maths.c.i
+.PHONY : src/maths.c.i
+
+src/maths.s: src/maths.c.s
+
+.PHONY : src/maths.s
+
+# target to generate assembly for a file
+src/maths.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/maths.c.s
+.PHONY : src/maths.c.s
+
+src/models.o: src/models.c.o
+
+.PHONY : src/models.o
+
+# target to build an object file
+src/models.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/models.c.o
+.PHONY : src/models.c.o
+
+src/models.i: src/models.c.i
+
+.PHONY : src/models.i
+
+# target to preprocess a source file
+src/models.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/models.c.i
+.PHONY : src/models.c.i
+
+src/models.s: src/models.c.s
+
+.PHONY : src/models.s
+
+# target to generate assembly for a file
+src/models.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/models.c.s
+.PHONY : src/models.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -213,15 +348,30 @@ help:
 	@echo "... rebuild_cache"
 	@echo "... Harp.exe"
 	@echo "... edit_cache"
+	@echo "... src/assets.o"
+	@echo "... src/assets.i"
+	@echo "... src/assets.s"
 	@echo "... src/components.o"
 	@echo "... src/components.i"
 	@echo "... src/components.s"
 	@echo "... src/ecs.o"
 	@echo "... src/ecs.i"
 	@echo "... src/ecs.s"
+	@echo "... src/game.o"
+	@echo "... src/game.i"
+	@echo "... src/game.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
+	@echo "... src/map.o"
+	@echo "... src/map.i"
+	@echo "... src/map.s"
+	@echo "... src/maths.o"
+	@echo "... src/maths.i"
+	@echo "... src/maths.s"
+	@echo "... src/models.o"
+	@echo "... src/models.i"
+	@echo "... src/models.s"
 .PHONY : help
 
 
