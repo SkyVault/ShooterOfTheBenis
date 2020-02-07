@@ -83,7 +83,7 @@ int main() {
         get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
     }
 
-    SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
+    //SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
 
     while (!WindowShouldClose() && game->state == STATE_RUNNING) {
         //UpdateCamera(&camera);

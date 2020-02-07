@@ -24,7 +24,7 @@
 #endif
 
 void set_camera_mode(Camera camera, int mode) {
-Vector3 v1 = camera.position;
+    Vector3 v1 = camera.position;
     Vector3 v2 = camera.target;
 
     float dx = v2.x - v1.x;
@@ -54,7 +54,12 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
     Transform* transform = get_comp(ecs, self, Transform);
     Player* player = get_comp(ecs, self, Player);
 
-    set_camera_mode(*camera, CAMERA_FIRST_PERSON);
+    static int first = 0;
+
+    if (!first) {
+        set_camera_mode(*camera, CAMERA_FIRST_PERSON);
+        first = 1;
+    }
 
     static int swingCounter = 0;    // Used for 1st person swinging movement
     static Vector2 previousMousePosition = { 0.0f, 0.0f };
@@ -62,12 +67,6 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
     // Mouse movement detection
     Vector2 mousePositionDelta = { 0.0f, 0.0f };
     Vector2 mousePosition = GetMousePosition();
-    int mouseWheelMove = GetMouseWheelMove();
-
-    // Keys input detection
-    bool panKey = IsMouseButtonDown(CAMERA.panControl);
-    bool altKey = IsKeyDown(CAMERA.altControl);
-    bool szoomKey = IsKeyDown(CAMERA.smoothZoomControl);
 
     bool direction[6] = { IsKeyDown(CAMERA.moveControl[MOVE_FRONT]),
                           IsKeyDown(CAMERA.moveControl[MOVE_BACK]),
@@ -81,16 +80,16 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
 
     previousMousePosition = mousePosition;
 
-    camera->position.x += (sinf(CAMERA.angle.x)*direction[MOVE_BACK] -
+    transform->translation.x += (sinf(CAMERA.angle.x)*direction[MOVE_BACK] -
                             sinf(CAMERA.angle.x)*direction[MOVE_FRONT] -
                             cosf(CAMERA.angle.x)*direction[MOVE_LEFT] +
                             cosf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
 
-    camera->position.y += (sinf(CAMERA.angle.y)*direction[MOVE_FRONT] -
+    transform->translation.y += (sinf(CAMERA.angle.y)*direction[MOVE_FRONT] -
                             sinf(CAMERA.angle.y)*direction[MOVE_BACK] +
                             1.0f*direction[MOVE_UP] - 1.0f*direction[MOVE_DOWN])/PLAYER_MOVEMENT_SENSITIVITY;
 
-    camera->position.z += (cosf(CAMERA.angle.x)*direction[MOVE_BACK] -
+    transform->translation.z += (cosf(CAMERA.angle.x)*direction[MOVE_BACK] -
                             cosf(CAMERA.angle.x)*direction[MOVE_FRONT] +
                             sinf(CAMERA.angle.x)*direction[MOVE_LEFT] -
                             sinf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
@@ -111,6 +110,8 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
     Matrix m_translation = MatrixTranslate(0, 0, (CAMERA.targetDistance/CAMERA_FREE_PANNING_DIVIDER));
     Matrix m_rotation = MatrixRotateXYZ((Vector3){ PI*2 - CAMERA.angle.y, PI*2 - CAMERA.angle.x, 0 });
     Matrix m_transform = MatrixMultiply(m_translation, m_rotation);
+
+    camera->position = transform->translation;
 
     camera->target.x = camera->position.x - m_transform.m12;
     camera->target.y = camera->position.y - m_transform.m13;
