@@ -339,6 +339,33 @@ src/models.c.s:
 	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/models.c.s
 .PHONY : src/models.c.s
 
+src/player.o: src/player.c.o
+
+.PHONY : src/player.o
+
+# target to build an object file
+src/player.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/player.c.o
+.PHONY : src/player.c.o
+
+src/player.i: src/player.c.i
+
+.PHONY : src/player.i
+
+# target to preprocess a source file
+src/player.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/player.c.i
+.PHONY : src/player.c.i
+
+src/player.s: src/player.c.s
+
+.PHONY : src/player.s
+
+# target to generate assembly for a file
+src/player.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/player.c.s
+.PHONY : src/player.c.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -372,6 +399,9 @@ help:
 	@echo "... src/models.o"
 	@echo "... src/models.i"
 	@echo "... src/models.s"
+	@echo "... src/player.o"
+	@echo "... src/player.i"
+	@echo "... src/player.s"
 .PHONY : help
 
 

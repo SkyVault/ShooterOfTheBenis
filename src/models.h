@@ -1,6 +1,8 @@
 #ifndef BENIS_MODELS_H
 #define BENIS_MODELS_H
 
+#define ACTOR_HEIGHT (1.8)
+
 #include "ecs.h"
 #include "raylib.h"
 

@@ -16,7 +16,7 @@ typedef struct {
     int state;
     Assets* assets;
     Camera* camera;
-    EcsWorld* ent_world;
+    EcsWorld* ecs;
 } Game;
 
 Game* create_game(Assets* assets, Camera* camera, EcsWorld* ent_world);

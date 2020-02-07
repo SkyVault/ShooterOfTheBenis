@@ -13,5 +13,5 @@ void draw_billboard(Camera* camera, EcsWorld* ecs, EntId ent) {
     Transform* transform = get_comp(ecs, self, Transform);
     Billboard* billboard = get_comp(ecs, self, Billboard);
 
-    DrawBillboard(*camera, billboard->texture, transform->translation, 2, RAYWHITE);
+    DrawBillboard(*camera, billboard->texture, transform->translation, ACTOR_HEIGHT, RAYWHITE);
 }

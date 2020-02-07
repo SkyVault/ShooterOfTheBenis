@@ -1,10 +1,12 @@
-#include <raylib.h>
+#include "raymath.h"
+
 #include <stdio.h>
 
 #define RLIGHTS_IMPLEMENTATION
 #include "rlights.h"
 
 #include "models.h"
+#include "player.h"
 #include "ecs.h"
 #include "game.h"
 #include "map.h"
@@ -41,9 +43,9 @@ int main() {
     camera.type = CAMERA_PERSPECTIVE;
 
     Assets* assets = create_and_load_assets();
-    EcsWorld* ent_world = make_ecs_world();
+    EcsWorld* ecs = make_ecs_world();
 
-    Game* game = create_game(assets, &camera, ent_world);
+    Game* game = create_game(assets, &camera, ecs);
 
     Shader* shader = &assets->shaders[SHADER_PHONG_LIGHTING];
     shader->locs[LOC_MATRIX_MODEL] = GetShaderLocation(*shader, "matModel");
@@ -61,26 +63,38 @@ int main() {
 
     Map* map = load_map(0, game);
 
+    // Create player
+    {
+        EntId player_id = create_ent(ecs);
+        EntStruct* player = get_ent(ecs, player_id);
+
+        add_comp(ecs, player, Transform, .translation = (Vector3){10.0f, 1.0f, 20.0f});
+        add_comp(ecs, player, Player);
+    }
+
     // Create some entities
     {
-        EntId anibae_id = create_ent(ent_world);
-        EntStruct* anibae = get_ent(ent_world, anibae_id);
+        EntId anibae_id = create_ent(ecs);
+        EntStruct* anibae = get_ent(ecs, anibae_id);
 
-        add_comp(ent_world, anibae, Transform, .translation=(Vector3){camera.position.x, 0, camera.position.z - 5});
-        add_comp(ent_world, anibae, Billboard, .texture = assets->textures[TEX_CHAR_1], .material = (Material){0});
+        add_comp(ecs, anibae, Transform, .translation=(Vector3){camera.position.x, 0, camera.position.z - 5});
+        add_comp(ecs, anibae, Billboard, .texture = assets->textures[TEX_CHAR_1], .material = (Material){0});
+
+        get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
     }
 
     SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
 
     while (!WindowShouldClose() && game->state == STATE_RUNNING) {
-        UpdateCamera(&camera);                  // Update camera
+        //UpdateCamera(&camera);
+
+        for (int i = 0; i < ecs->max_num_entities; i++) {
+            if (!is_ent_alive(ecs, i)) continue;
+            update_billboard(ecs, i);
+            update_player(ecs, &camera, i);
+        }
 
         update_map(map, game);
-
-        for (int i = 0; i < ent_world->max_num_entities; i++) {
-            if (!is_ent_alive(ent_world, i)) continue;
-            update_billboard(ent_world, i);
-        }
 
         for (int i = 0; i < MAX_LIGHTS; i++) {
             lights[i].position = camera.position;
@@ -92,9 +106,9 @@ int main() {
             BeginMode3D(camera);
                 draw_map(map, game);
 
-                for (int i = 0; i < ent_world->max_num_entities; i++) {
-                    if (!is_ent_alive(ent_world, i)) continue;
-                    draw_billboard(&camera, ent_world, i);
+                for (int i = 0; i < ecs->max_num_entities; i++) {
+                    if (!is_ent_alive(ecs, i)) continue;
+                    draw_billboard(&camera, ecs, i);
                 }
 
             EndMode3D();
