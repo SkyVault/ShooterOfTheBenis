@@ -11,7 +11,7 @@ Map* load_map(int map, Game* game) {
 
     Model default_wall = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
     default_wall.materials[0].maps[MAP_DIFFUSE].texture = game->assets->textures[TEX_WALL_1];
-    default_wall.materials[0] .shader = game->assets->shaders[SHADER_PHONG_LIGHTING];
+    default_wall.materials[0].shader = game->assets->shaders[SHADER_PHONG_LIGHTING];
     
     for (int z = 0; z < data->h; z++) {
         for (int x = 0; x < data->w; x++) {
@@ -26,24 +26,34 @@ Map* load_map(int map, Game* game) {
         }
     }
 
+    result->floor_tile_models[0] = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
+    result->floor_tile_models[0].materials[0].maps[MAP_DIFFUSE].texture = game->assets->textures[TEX_FLOOR_1];
+    result->floor_tile_models[0].materials[0].shader = game->assets->shaders[SHADER_PHONG_LIGHTING];
+
     return result;
 }
 
-void update_map(Map* map) {
+void update_map(Map* map, Game* game) {
 
 }
 
-void draw_map(Map* map) {
+void draw_map(Map* map, Game* game) {
     const struct LvlData* data = &map_data[map->current_map];
 
     for (int z = 0; z < data->h; z++) {
         for (int x = 0; x < data->w; x++) {
             char chr = data->d[x + z * data->w];
 
-            if (chr != '.' && map->walls[x + z * data->w].active) {
+            if (chr != ' ' && map->walls[x + z * data->w].active) {
                 DrawModel(
                     map->walls[x + z * data->w].model,
                     (Vector3){x * CUBE_SIZE, 0, z * CUBE_SIZE},
+                    CUBE_SIZE,
+                    RAYWHITE);
+            } else {
+                DrawModel(
+                    map->floor_tile_models[0],
+                    (Vector3){x * CUBE_SIZE, -CUBE_SIZE, z * CUBE_SIZE},
                     CUBE_SIZE,
                     RAYWHITE);
             }

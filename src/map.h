@@ -21,18 +21,18 @@ struct LvlData {
 
 static const struct LvlData map_data[] = {
     [0] = {
-        .w = 10,
+        .w = 18,
         .h = 10,
-        .d = "##########"
-             "#........#"
-             "#...#....#"
-             "#........#"
-             "#..##....#"
-             "#........#"
-             "#........#"
-             "#....#...#"
-             "#........#"
-             "##########" }
+        .d = "########## #######"
+             "#        ###     #"
+             "#   #            #"
+             "#        ###     #"
+             "#  ##    # #######"
+             "#        #        "
+             "#        #        "
+             "#    #   #        "
+             "#        #        "
+             "##########        " }
 };
 
 typedef struct {
@@ -43,11 +43,12 @@ typedef struct {
 typedef struct {
     int current_map;
     Wall walls[MAX_MAP_WIDTH*MAX_MAP_HEIGHT];
+    Model floor_tile_models[1];
 } Map;
 
 Map* load_map(int map, Game* game);
 
-void update_map(Map* map);
-void draw_map(Map* map);
+void update_map(Map* map, Game* game);
+void draw_map(Map* map, Game* game);
 
 #endif//BENIS_MAP_H

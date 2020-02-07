@@ -6,7 +6,9 @@ Assets* create_and_load_assets() {
     *ass = (Assets) {
         .meshes = { [MESH_CUBE] = GenMeshCube(1, 1, 1),
                     [MESH_PLANE] = GenMeshPlane(1, 1, 10, 10), },
+
         .textures = { [TEX_WALL_1] = LoadTexture("resources/wall_1.png"),
+                      [TEX_FLOOR_1] = LoadTexture("resources/floor_1.png"),
                       [TEX_CHAR_1] = LoadTexture("resources/char.png") },
 
         .shaders = { [SHADER_PHONG_LIGHTING] = LoadShader("resources/phong_vs.glsl", "resources/phong_fs.glsl") }

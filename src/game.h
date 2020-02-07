@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 
+#include "ecs.h"
 #include "assets.h"
 
 enum State {
@@ -15,8 +16,9 @@ typedef struct {
     int state;
     Assets* assets;
     Camera* camera;
+    EcsWorld* ent_world;
 } Game;
 
-Game* create_game(Assets* assets, Camera* camera);
+Game* create_game(Assets* assets, Camera* camera, EcsWorld* ent_world);
 
 #endif//BENIS_GAME_H

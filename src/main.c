@@ -4,6 +4,8 @@
 #define RLIGHTS_IMPLEMENTATION
 #include "rlights.h"
 
+#include "models.h"
+#include "ecs.h"
 #include "game.h"
 #include "map.h"
 #include "assets.h"
@@ -39,7 +41,9 @@ int main() {
     camera.type = CAMERA_PERSPECTIVE;
 
     Assets* assets = create_and_load_assets();
-    Game* game = create_game(assets, &camera);
+    EcsWorld* ent_world = make_ecs_world();
+
+    Game* game = create_game(assets, &camera, ent_world);
 
     Shader* shader = &assets->shaders[SHADER_PHONG_LIGHTING];
     shader->locs[LOC_MATRIX_MODEL] = GetShaderLocation(*shader, "matModel");
@@ -48,7 +52,6 @@ int main() {
     int ambientLoc = GetShaderLocation(*shader, "ambient");
     SetShaderValue(*shader, ambientLoc, (float[4]){0.2f, 0.2f, 0.2f, 1.0f}, UNIFORM_VEC4);
 
-    // Using 4 point lights, white, red, green and blue
     Light lights[MAX_LIGHTS] = { 0 };
     lights[0] = CreateLight(LIGHT_POINT, (Vector3){ -10, 0, -10 }, (Vector3){0}, WHITE, *shader);
 
@@ -58,12 +61,26 @@ int main() {
 
     Map* map = load_map(0, game);
 
+    // Create some entities
+    {
+        EntId anibae_id = create_ent(ent_world);
+        EntStruct* anibae = get_ent(ent_world, anibae_id);
+
+        add_comp(ent_world, anibae, Transform, .translation=(Vector3){camera.position.x, 0, camera.position.z - 5});
+        add_comp(ent_world, anibae, Billboard, .texture = assets->textures[TEX_CHAR_1], .material = (Material){0});
+    }
+
     SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
 
     while (!WindowShouldClose() && game->state == STATE_RUNNING) {
         UpdateCamera(&camera);                  // Update camera
 
-        update_map(map);
+        update_map(map, game);
+
+        for (int i = 0; i < ent_world->max_num_entities; i++) {
+            if (!is_ent_alive(ent_world, i)) continue;
+            update_billboard(ent_world, i);
+        }
 
         for (int i = 0; i < MAX_LIGHTS; i++) {
             lights[i].position = camera.position;
@@ -73,7 +90,13 @@ int main() {
         BeginDrawing();
             ClearBackground(BLACK);
             BeginMode3D(camera);
-                draw_map(map);
+                draw_map(map, game);
+
+                for (int i = 0; i < ent_world->max_num_entities; i++) {
+                    if (!is_ent_alive(ent_world, i)) continue;
+                    draw_billboard(&camera, ent_world, i);
+                }
+
             EndMode3D();
 
         EndDrawing();

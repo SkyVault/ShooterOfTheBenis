@@ -11,5 +11,7 @@
     X(CT_Actor)\
     X(CT_Item)\
     X(CT_Trigger)\
+    X(CT_Transform)\
+    X(CT_Billboard)\
     X(CT_NumComponentTypes)
 #endif
