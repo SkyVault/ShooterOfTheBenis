@@ -1,37 +1,37 @@
 #include "map.h"
 
-void create_x_door(Vector3 pos, Game* game) {
+EntStruct* create_door(Vector3 pos, Game* game) {
     EcsWorld* ecs = game->ecs;
-
     EntId id = create_ent(ecs);
     EntStruct* self = get_ent(ecs, id);
+    add_comp_obj(ecs, self, Physics, create_physics());
+    add_comp(ecs, self, Transform, .translation=pos);
+    add_comp(ecs, self, Door, .facing=Facing_X, .state=Door_Closed, .timer=0);
+    get_comp(ecs, self, Physics)->friction = 0.2f;
+    return self;
+}
 
+void create_x_door(Vector3 pos, Game* game) {
+    EntStruct* self = create_door(pos, game);
     Model model = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
     model.transform =
         MatrixMultiply(
             model.transform,
             MatrixScale(CUBE_SIZE, CUBE_SIZE, 0.5f*CUBE_SIZE));
     model.materials[0].maps[MAP_DIFFUSE].color = BLUE;
-
-    add_comp(ecs, self, Transform, .translation=pos);
-    add_comp_obj(ecs, self, Model, model);
+    add_comp_obj(game->ecs, self, Model, model);
 }
 
 void create_z_door(Vector3 pos, Game* game) {
-    EcsWorld* ecs = game->ecs;
-
-    EntId id = create_ent(ecs);
-    EntStruct* self = get_ent(ecs, id);
-
+    EntStruct* self = create_door(pos, game);
     Model model = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
     model.transform =
         MatrixMultiply(
             model.transform,
             MatrixScale(0.5f*CUBE_SIZE, CUBE_SIZE, CUBE_SIZE));
     model.materials[0].maps[MAP_DIFFUSE].color = BLUE;
-
-    add_comp(ecs, self, Transform, .translation=pos);
-    add_comp_obj(ecs, self, Model, model);
+    add_comp_obj(game->ecs, self, Model, model);
+    get_comp(game->ecs, self, Door)->facing = Facing_Z;
 }
 
 Map* load_map(int map, Game* game) {

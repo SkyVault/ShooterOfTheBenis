@@ -1,5 +1,7 @@
 #include "components.h"
 
+#define DOOR_INTERACTION_DISTANCE (5)
+
 int contains(Body* a, Body* b) {
     return
         a->pos.x + a->size.x > b->pos.x &&
@@ -27,4 +29,44 @@ void update_timed_destroy(EcsWorld* world, EntId id) {
     }
 
     td->time_left -= GetFrameTime();
+}
+
+void update_doors(EcsWorld* ecs, EntId id) {
+    EntStruct* self = get_ent(ecs, id);
+
+    if (!has_comp(ecs, self, Door) ||
+        !has_comp(ecs, self, Model)) {
+        return;
+    }
+
+    Door* door = get_comp(ecs, self, Door);
+    Model* model = get_comp(ecs, self, Model);
+    Transform* transform = get_comp(ecs, self, Transform);
+
+    EntId player_id = get_first_with(ecs, Player);
+    if (player_id < 0) return;
+
+    EntStruct* player = get_ent(ecs, player_id);
+
+    Transform* player_transform = get_comp(ecs, player, Transform);
+
+    // Get distance from player
+    float distance = Vector3Distance(
+        player_transform->translation,
+        transform->translation);
+
+    if (distance < DOOR_INTERACTION_DISTANCE &&
+        door->state == Door_Closed &&
+        IsKeyPressed(KEY_SPACE)) {
+
+        if (door->facing == Facing_X) {
+            get_comp(ecs, self, Physics)->velocity.x = 600 * GetFrameTime();
+        }
+
+        if (door->facing == Facing_Z) {
+            get_comp(ecs, self, Physics)->velocity.z = 600 * GetFrameTime();
+        }
+
+        door->state = Door_Open;
+    }
 }

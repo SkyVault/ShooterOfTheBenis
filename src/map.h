@@ -4,6 +4,7 @@
 #include <stdlib.h>
 
 #include "game.h"
+#include "components.h"
 #include "ecs.h"
 #include "assets.h"
 #include "physics.h"

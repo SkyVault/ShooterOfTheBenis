@@ -106,6 +106,7 @@ int main() {
             update_billboard(ecs, i);
             update_player(ecs, assets, &camera, i);
             update_physics(ecs, game, i);
+            update_doors(ecs, i);
         }
 
         update_map(map, game);

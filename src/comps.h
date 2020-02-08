@@ -14,5 +14,6 @@
     X(CT_Transform)\
     X(CT_Billboard)\
     X(CT_Model)\
+    X(CT_Door)\
     X(CT_NumComponentTypes)
 #endif
