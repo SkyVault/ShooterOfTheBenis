@@ -5,6 +5,7 @@
 #define RLIGHTS_IMPLEMENTATION
 #include "rlights.h"
 
+#include "physics.h"
 #include "models.h"
 #include "player.h"
 #include "ecs.h"
@@ -70,6 +71,7 @@ int main() {
 
         add_comp(ecs, player, Transform, .translation = (Vector3){10.0f, 1.0f, 20.0f});
         add_comp(ecs, player, Player);
+        add_comp_obj(ecs, player, Physics, create_physics());
     }
 
     // Create some entities
@@ -79,6 +81,7 @@ int main() {
 
         add_comp(ecs, anibae, Transform, .translation=(Vector3){camera.position.x, 0, camera.position.z - 5});
         add_comp(ecs, anibae, Billboard, .texture = assets->textures[TEX_CHAR_1], .material = (Material){0});
+        add_comp_obj(ecs, anibae, Physics, create_physics());
 
         get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
     }
@@ -91,7 +94,7 @@ int main() {
         for (int i = 0; i < ecs->max_num_entities; i++) {
             if (!is_ent_alive(ecs, i)) continue;
             update_billboard(ecs, i);
-            update_player(ecs, &camera, i);
+            update_player(ecs, assets, &camera, i);
         }
 
         update_map(map, game);

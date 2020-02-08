@@ -46,7 +46,7 @@ void set_camera_mode(Camera camera, int mode) {
     CAMERA.mode = mode;
 }
 
-void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
+void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId id) {
     EntStruct* self = get_ent(ecs, id);
 
     if (!has_comp(ecs, self, Player) ||
@@ -57,11 +57,21 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
     Physics* physics = get_comp(ecs, self, Physics);
     Player* player = get_comp(ecs, self, Player);
 
-    static int first = 0;
+    // Shoot
+    if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
+        EntId bullet_id = create_ent(ecs);
+        EntStruct* bullet = get_ent(ecs, bullet_id);
 
-    if (IsKeyDown(KEY_E)) {
-        physics->velocity.z = 1000 * GetFrameTime();
+        add_comp(ecs, bullet, Transform, .translation = transform->translation);
+        add_comp_obj(ecs, bullet, Physics, create_physics());
+
+        add_comp(ecs, bullet, Billboard, .texture = ass->textures[TEX_CHAR_1], .material = (Material){0});
+
+        get_comp(ecs, bullet, Physics)->velocity.x = 100 * GetFrameTime();
+        get_comp(ecs, bullet, Physics)->friction = 1;
     }
+
+    static int first = 0;
 
     if (!first) {
         set_camera_mode(*camera, CAMERA_FIRST_PERSON);

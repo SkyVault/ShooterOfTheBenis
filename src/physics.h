@@ -1,6 +1,9 @@
 #ifndef BENIS_PHYSICS_H
 #define BENIS_PHYSICS_H
 
+#include <math.h>
+#include <stdlib.h>
+
 #include "game.h"
 #include "ecs.h"
 #include "raylib.h"
@@ -11,7 +14,7 @@ typedef struct {
     float friction;
 } Physics;
 
-Physics* create_physics();
+Physics create_physics();
 
 void update_physics(EcsWorld* ecs, Game* game, EntId ent);
 

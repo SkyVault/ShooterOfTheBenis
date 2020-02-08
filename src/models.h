@@ -5,11 +5,7 @@
 
 #include "ecs.h"
 #include "raylib.h"
-
-typedef struct {
-    Texture2D texture;
-    Material material;
-} Billboard;
+#include "billboard.h"
 
 void update_billboard(EcsWorld* ecs, EntId ent);
 void draw_billboard(Camera* camera, EcsWorld* ecs, EntId ent);

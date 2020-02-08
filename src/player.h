@@ -3,14 +3,14 @@
 
 #include <math.h>
 
+#include "assets.h"
+#include "models.h"
 #include "physics.h"
 #include "raymath.h"
 #include "ecs.h"
 #include "raylib.h"
 
-typedef struct {
-
-} Player;
+typedef struct {} Player;
 
 typedef enum {
     MOVE_FRONT = 0,
@@ -43,7 +43,6 @@ static CameraData CAMERA = {
     .panControl = 2
 };
 
-
-void update_player(EcsWorld* ecs, Camera* camera, EntId self);
+void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId self);
 
 #endif//BENIS_PLAYER_H
