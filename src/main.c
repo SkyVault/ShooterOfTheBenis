@@ -80,7 +80,7 @@ int main() {
         EntStruct* anibae = get_ent(ecs, anibae_id);
 
         add_comp(ecs, anibae, Transform, .translation=(Vector3){camera.position.x, 0, camera.position.z - 5});
-        add_comp(ecs, anibae, Billboard, .texture = assets->textures[TEX_CHAR_1], .material = (Material){0});
+        add_comp(ecs, anibae, Billboard, .texture = assets->textures[TEX_EWW], .material = (Material){0});
         add_comp_obj(ecs, anibae, Physics, create_physics());
 
         get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
