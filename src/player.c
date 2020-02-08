@@ -57,6 +57,8 @@ void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId id) {
     Physics* physics = get_comp(ecs, self, Physics);
     Player* player = get_comp(ecs, self, Player);
 
+    const float angle = PI*2 - CAMERA.angle.x - PI/2;
+
     // Shoot
     if (IsMouseButtonPressed(MOUSE_LEFT_BUTTON)) {
         EntId bullet_id = create_ent(ecs);
@@ -67,8 +69,14 @@ void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId id) {
 
         add_comp(ecs, bullet, Billboard, .texture = ass->textures[TEX_CHAR_1], .material = (Material){0});
 
-        get_comp(ecs, bullet, Physics)->velocity.x = 100 * GetFrameTime();
-        get_comp(ecs, bullet, Physics)->friction = 1;
+
+        float vx = cosf(angle) * 100.0f * GetFrameTime();
+        float vz = sinf(angle) * 100.0f * GetFrameTime();
+
+        Physics* physics = get_comp(ecs, bullet, Physics);
+        physics->velocity.x = vx;
+        physics->velocity.z = vz;
+        physics->friction = 1;
     }
 
     static int first = 0;
