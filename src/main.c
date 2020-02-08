@@ -47,6 +47,7 @@ int main() {
     EcsWorld* ecs = make_ecs_world();
 
     Game* game = create_game(assets, &camera, ecs);
+    GfxState* gfx = create_gfx_state();
 
     Shader* shader = &assets->shaders[SHADER_PHONG_LIGHTING];
     shader->locs[LOC_MATRIX_MODEL] = GetShaderLocation(*shader, "matModel");
@@ -121,8 +122,11 @@ int main() {
 
                 for (int i = 0; i < ecs->max_num_entities; i++) {
                     if (!is_ent_alive(ecs, i)) continue;
-                    draw_billboard(&camera, ecs, i);
+                    draw_billboard(gfx, &camera, ecs, i);
                 }
+
+                // Do the final draw to the screen
+                flush_graphics(gfx, &camera);
 
             EndMode3D();
 

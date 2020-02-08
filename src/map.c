@@ -1,5 +1,17 @@
 #include "map.h"
 
+void create_x_door(Vector3 pos, Game* game) {
+    EcsWorld* ecs = game->ecs;
+
+    EntId id = create_ent(ecs);
+    EntStruct* self = get_ent(ecs, id);
+
+    //Model model = 
+
+    add_comp(ecs, self, Transform, .translation=pos);
+    //add_comp_obj(ecs, self, Model, ...);
+}
+
 Map* load_map(int map, Game* game) {
     Map* result = malloc(sizeof(Map));
     result->current_map = map;
