@@ -86,7 +86,16 @@ int main() {
         get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
     }
 
-    //SetCameraMode(camera, CAMERA_FIRST_PERSON); // Set a first person camera mode
+    {
+        EntId anibae_id = create_ent(ecs);
+        EntStruct* anibae = get_ent(ecs, anibae_id);
+
+        add_comp(ecs, anibae, Transform, .translation=(Vector3){camera.position.x - 2, 0, camera.position.z - 5});
+        add_comp(ecs, anibae, Billboard, .texture = assets->textures[TEX_EWW2], .material = (Material){0});
+        add_comp_obj(ecs, anibae, Physics, create_physics());
+
+        get_comp(ecs, anibae, Transform)->translation.y = -ACTOR_HEIGHT/4;
+    }
 
     while (!WindowShouldClose() && game->state == STATE_RUNNING) {
         //UpdateCamera(&camera);

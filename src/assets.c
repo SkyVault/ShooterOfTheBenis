@@ -11,7 +11,8 @@ Assets* create_and_load_assets() {
                       [TEX_FLOOR_1] = LoadTexture("resources/floor_1.png"),
                       [TEX_CHAR_1] = LoadTexture("resources/char.png"),
                       [TEX_SALAMI] = LoadTexture("resources/salami.png"),
-                      [TEX_EWW] = LoadTexture("resources/eww.png")},
+                      [TEX_EWW] = LoadTexture("resources/eww.png"),
+                      [TEX_EWW2] = LoadTexture("resources/eww2.png") },
 
         .shaders = { [SHADER_PHONG_LIGHTING] = LoadShader("resources/phong_vs.glsl", "resources/phong_fs.glsl") }
     };

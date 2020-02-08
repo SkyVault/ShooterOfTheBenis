@@ -44,18 +44,28 @@ void draw_map(Map* map, Game* game) {
         for (int x = 0; x < data->w; x++) {
             char chr = data->d[x + z * data->w];
 
-            if (chr != ' ' && map->walls[x + z * data->w].active) {
-                DrawModel(
-                    map->walls[x + z * data->w].model,
-                    (Vector3){x * CUBE_SIZE, 0, z * CUBE_SIZE},
-                    CUBE_SIZE,
-                    RAYWHITE);
-            } else {
-                DrawModel(
-                    map->floor_tile_models[0],
-                    (Vector3){x * CUBE_SIZE, -CUBE_SIZE, z * CUBE_SIZE},
-                    CUBE_SIZE,
-                    RAYWHITE);
+            Vector3 pos = (Vector3){x * CUBE_SIZE, 0, z * CUBE_SIZE};
+
+            DrawModel(
+                map->floor_tile_models[0],
+                (Vector3){x * CUBE_SIZE, -CUBE_SIZE, z * CUBE_SIZE},
+                CUBE_SIZE,
+                RAYWHITE);
+
+            if (map->walls[x+z*data->w].active) {
+                switch (chr) {
+                    case '|':
+                        DrawCube(pos, 2, 5, 5, BLUE);
+                        break;
+                    case '#':
+                        DrawModel(
+                            map->walls[x + z * data->w].model,
+                            pos,
+                            CUBE_SIZE,
+                            RAYWHITE);
+                        break;
+                    case ' ': break;
+                }
             }
         }
     }

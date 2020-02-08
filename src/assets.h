@@ -11,6 +11,7 @@ enum Textures {
     TEX_CHAR_1,
     TEX_SALAMI,
     TEX_EWW,
+    TEX_EWW2,
     TEX_NUM_TEXTURES,
 };
 
