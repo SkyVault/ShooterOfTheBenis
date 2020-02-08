@@ -1,6 +1,6 @@
 #include "player.h"
 
-#define PLAYER_MOVEMENT_SENSITIVITY (20.0f)
+#define PLAYER_MOVEMENT_SENSITIVITY (8.0f)
 #define CAMERA_MOUSE_MOVE_SENSITIVITY                   0.003f
 #define CAMERA_MOUSE_SCROLL_SENSITIVITY                 1.5f
 #define CAMERA_FIRST_PERSON_MOUSE_SENSITIVITY           0.003f
@@ -125,5 +125,4 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
 
     camera->up.x = sinf(swingCounter/(CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER*2))/CAMERA_FIRST_PERSON_WAVING_DIVIDER;
     camera->up.z = -sinf(swingCounter/(CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER*2))/CAMERA_FIRST_PERSON_WAVING_DIVIDER;
-
 }
