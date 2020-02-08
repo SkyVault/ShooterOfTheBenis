@@ -95,6 +95,7 @@ int main() {
             if (!is_ent_alive(ecs, i)) continue;
             update_billboard(ecs, i);
             update_player(ecs, assets, &camera, i);
+            update_physics(ecs, game, i);
         }
 
         update_map(map, game);
