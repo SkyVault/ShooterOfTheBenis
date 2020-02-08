@@ -64,18 +64,19 @@ void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId id) {
         EntId bullet_id = create_ent(ecs);
         EntStruct* bullet = get_ent(ecs, bullet_id);
 
-        add_comp(ecs, bullet, Transform, .translation = transform->translation);
+        Vector3 pos = transform->translation;
+
+        pos.x += cosf(angle);
+        pos.z += sinf(angle);
+
+        add_comp(ecs, bullet, Transform, .translation = pos);
         add_comp_obj(ecs, bullet, Physics, create_physics());
 
-        add_comp(ecs, bullet, Billboard, .texture = ass->textures[TEX_CHAR_1], .material = (Material){0});
-
-
-        float vx = cosf(angle) * 100.0f * GetFrameTime();
-        float vz = sinf(angle) * 100.0f * GetFrameTime();
+        add_comp(ecs, bullet, Billboard, .texture = ass->textures[TEX_SALAMI], .material = (Material){0});
 
         Physics* physics = get_comp(ecs, bullet, Physics);
-        physics->velocity.x = vx;
-        physics->velocity.z = vz;
+        physics->velocity.x = cosf(angle) * 400.0f * GetFrameTime();
+        physics->velocity.z = sinf(angle) * 400.0f * GetFrameTime();
         physics->friction = 1;
     }
 
