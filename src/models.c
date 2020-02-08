@@ -18,14 +18,13 @@ void draw_billboard(GfxState* gfx, Camera* camera, EcsWorld* ecs, EntId ent) {
     if (!has_comp(ecs, self, Billboard) || !has_comp(ecs, self, Transform))
         return;
 
-
     if (gfx->num_drawables < MAX_NUMBER_OF_DRAWABLES) {
         gfx->drawables[gfx->num_drawables++] = (Drawable) {
             .type = DrawType_Billboard,
             .flags = DrawFlag_Active,
             .transform = *get_comp(ecs, self, Transform),
-            .diffuse = RAYWHITE,
             .billboard = *get_comp(ecs, self, Billboard),
+            .diffuse = RAYWHITE,
         };
     }
 }
@@ -34,8 +33,21 @@ void update_models(EcsWorld* ecs, EntId ent) {
 
 }    
 
-void draw_models(EcsWorld* ecs, EntId ent) {
+void draw_models(GfxState* gfx, EcsWorld* ecs, EntId ent) {
+    EntStruct* self = get_ent(ecs, ent);
 
+    if (!has_comp(ecs, self, Model) ||
+        !has_comp(ecs, self, Transform)) return;
+
+    if (gfx->num_drawables < MAX_NUMBER_OF_DRAWABLES) {
+        gfx->drawables[gfx->num_drawables++] = (Drawable) {
+            .type = DrawType_Model,
+            .flags = DrawFlag_Active,
+            .transform = *get_comp(ecs, self, Transform),
+            .model = *get_comp(ecs, self, Model),
+            .diffuse = RAYWHITE,
+        };
+    }
 }
 
 void flush_graphics(GfxState* gfx, Camera* camera) {
@@ -48,6 +60,12 @@ void flush_graphics(GfxState* gfx, Camera* camera) {
         if (d->type == DrawType_Billboard) {
             DrawBillboard(*camera, d->billboard.texture, d->transform.translation, ACTOR_HEIGHT, RAYWHITE);
 
+        } else if (d->type == DrawType_Model) {
+            DrawModel(
+                d->model,
+                d->transform.translation,
+                1,
+                RAYWHITE);
         }
     }
 

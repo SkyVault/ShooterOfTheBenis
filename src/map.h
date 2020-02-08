@@ -8,6 +8,7 @@
 #include "assets.h"
 #include "physics.h"
 #include "raylib.h"
+#include "raymath.h"
 
 #define MAX_MAP_WIDTH (100)
 #define MAX_MAP_HEIGHT (100)
@@ -28,12 +29,12 @@ static const struct LvlData map_data[] = {
              "#        ###     #"
              "#   #    |       #"
              "#        ###     #"
-             "#  ##-## # #######"
-             "#        #        "
-             "#        #        "
-             "#    #   #        "
-             "#        #        "
-             "##########        " }
+             "#  ##-## # ###-###"
+             "#        |   #   #"
+             "#        #####   #"
+             "#    #   #       #"
+             "#        #       #"
+             "############ #####" }
 };
 
 typedef struct {

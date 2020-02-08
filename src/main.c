@@ -123,6 +123,7 @@ int main() {
                 for (int i = 0; i < ecs->max_num_entities; i++) {
                     if (!is_ent_alive(ecs, i)) continue;
                     draw_billboard(gfx, &camera, ecs, i);
+                    draw_models(gfx, ecs, i);
                 }
 
                 // Do the final draw to the screen

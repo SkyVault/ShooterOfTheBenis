@@ -6,10 +6,32 @@ void create_x_door(Vector3 pos, Game* game) {
     EntId id = create_ent(ecs);
     EntStruct* self = get_ent(ecs, id);
 
-    //Model model = 
+    Model model = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
+    model.transform =
+        MatrixMultiply(
+            model.transform,
+            MatrixScale(CUBE_SIZE, CUBE_SIZE, 0.5f*CUBE_SIZE));
+    model.materials[0].maps[MAP_DIFFUSE].color = BLUE;
 
     add_comp(ecs, self, Transform, .translation=pos);
-    //add_comp_obj(ecs, self, Model, ...);
+    add_comp_obj(ecs, self, Model, model);
+}
+
+void create_z_door(Vector3 pos, Game* game) {
+    EcsWorld* ecs = game->ecs;
+
+    EntId id = create_ent(ecs);
+    EntStruct* self = get_ent(ecs, id);
+
+    Model model = LoadModelFromMesh(game->assets->meshes[MESH_CUBE]);
+    model.transform =
+        MatrixMultiply(
+            model.transform,
+            MatrixScale(0.5f*CUBE_SIZE, CUBE_SIZE, CUBE_SIZE));
+    model.materials[0].maps[MAP_DIFFUSE].color = BLUE;
+
+    add_comp(ecs, self, Transform, .translation=pos);
+    add_comp_obj(ecs, self, Model, model);
 }
 
 Map* load_map(int map, Game* game) {
@@ -29,7 +51,25 @@ Map* load_map(int map, Game* game) {
         for (int x = 0; x < data->w; x++) {
             char chr = data->d[x + z * data->w];
 
-            if (chr != '.') {
+            // Load the entities and tiles
+            Vector3 pos = (Vector3){
+                       .x = x * CUBE_SIZE,
+                       .y = 0,
+                       .z = z * CUBE_SIZE
+            };
+            switch (chr) {
+                case '|':
+                    create_z_door(pos, game);
+                    break;
+                case '-':
+                    create_x_door(pos, game);
+                    break;
+                case '#':
+                    break;
+                case ' ': break;
+            }
+
+            if (chr != ' ') {
                 result->walls[x + z * data->w].active = 1;
                 result->walls[x + z * data->w].model = default_wall;
             } else {
@@ -66,12 +106,6 @@ void draw_map(Map* map, Game* game) {
 
             if (map->walls[x+z*data->w].active) {
                 switch (chr) {
-                    case '|':
-                        DrawCube(pos, 2, 5, 5, BLUE);
-                        break;
-                    case '-':
-                        DrawCube(pos, 5, 5, 2, BLUE);
-                        break;
                     case '#':
                         DrawModel(
                             map->walls[x + z * data->w].model,

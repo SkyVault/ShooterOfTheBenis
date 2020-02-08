@@ -13,5 +13,6 @@
     X(CT_Trigger)\
     X(CT_Transform)\
     X(CT_Billboard)\
+    X(CT_Model)\
     X(CT_NumComponentTypes)
 #endif
