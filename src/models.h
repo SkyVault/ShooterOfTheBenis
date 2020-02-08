@@ -10,4 +10,7 @@
 void update_billboard(EcsWorld* ecs, EntId ent);
 void draw_billboard(Camera* camera, EcsWorld* ecs, EntId ent);
 
+void update_models(EcsWorld* ecs, EntId ent); // Animations?
+void draw_models(EcsWorld* ecs, EntId ent);
+
 #endif//BENIS_MODELS_H

@@ -15,3 +15,11 @@ void draw_billboard(Camera* camera, EcsWorld* ecs, EntId ent) {
 
     DrawBillboard(*camera, billboard->texture, transform->translation, ACTOR_HEIGHT, RAYWHITE);
 }
+
+void update_models(EcsWorld* ecs, EntId ent) {
+
+}    
+
+void draw_models(EcsWorld* ecs, EntId ent) {
+
+}
