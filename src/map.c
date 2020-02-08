@@ -57,6 +57,9 @@ void draw_map(Map* map, Game* game) {
                     case '|':
                         DrawCube(pos, 2, 5, 5, BLUE);
                         break;
+                    case '-':
+                        DrawCube(pos, 5, 5, 2, BLUE);
+                        break;
                     case '#':
                         DrawModel(
                             map->walls[x + z * data->w].model,
