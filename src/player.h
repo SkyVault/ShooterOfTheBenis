@@ -3,6 +3,7 @@
 
 #include <math.h>
 
+#include "physics.h"
 #include "raymath.h"
 #include "ecs.h"
 #include "raylib.h"

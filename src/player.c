@@ -49,12 +49,19 @@ void set_camera_mode(Camera camera, int mode) {
 void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
     EntStruct* self = get_ent(ecs, id);
 
-    if (!has_comp(ecs, self, Player) || !has_comp(ecs, self, Transform)) return;
+    if (!has_comp(ecs, self, Player) ||
+        !has_comp(ecs, self, Transform) ||
+        !has_comp(ecs, self, Physics)) return;
 
     Transform* transform = get_comp(ecs, self, Transform);
+    Physics* physics = get_comp(ecs, self, Physics);
     Player* player = get_comp(ecs, self, Player);
 
     static int first = 0;
+
+    if (IsKeyDown(KEY_E)) {
+        physics->velocity.z = 1000 * GetFrameTime();
+    }
 
     if (!first) {
         set_camera_mode(*camera, CAMERA_FIRST_PERSON);
@@ -121,7 +128,7 @@ void update_player(EcsWorld* ecs, Camera* camera, EntId id) {
 
     // Camera position update
     // NOTE: On CAMERA_FIRST_PERSON player Y-movement is limited to player 'eyes position'
-    camera->position.y = CAMERA.playerEyesPosition - sinf(swingCounter/CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER)/CAMERA_FIRST_PERSON_STEP_DIVIDER;
+    transform->translation.y = CAMERA.playerEyesPosition - sinf(swingCounter/CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER)/CAMERA_FIRST_PERSON_STEP_DIVIDER;
 
     camera->up.x = sinf(swingCounter/(CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER*2))/CAMERA_FIRST_PERSON_WAVING_DIVIDER;
     camera->up.z = -sinf(swingCounter/(CAMERA_FIRST_PERSON_STEP_TRIGONOMETRIC_DIVIDER*2))/CAMERA_FIRST_PERSON_WAVING_DIVIDER;
