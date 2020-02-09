@@ -23,6 +23,8 @@ enum Meshes {
 
 enum Shaders {
     SHADER_PHONG_LIGHTING,
+    SHADER_SKYBOX,
+    SHADER_CUBEMAP,
     SHADER_NUM_SHADERS,
 };
 

@@ -1,4 +1,6 @@
 #include "raymath.h"
+#include "rlgl.h"
+#include "raylib.h"
 
 #include <stdio.h>
 
@@ -35,6 +37,11 @@ int main() {
     InitWindow(SCREEN_WIDTH, SCREEN_HEIGHT, "DevWindow");
     SetTargetFPS(60);
 
+    //glBlendEquation(GL_FUNC_ADD);
+    //glBendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    rlEnableBackfaceCulling();
+    rlEnableDepthTest();
+
     // Define the camera to look into our 3d world (position, target, up vector)
     Camera camera = { 0 };
     camera.position = (Vector3){ 10.0f, 1.0f, 20.0f };
@@ -62,6 +69,24 @@ int main() {
     for (int i = 0; i < MAX_LIGHTS; i++) {
         UpdateLightValues(*shader, lights[i]);
     }
+
+    // Load the skybox
+    game->skybox = LoadModelFromMesh(assets->meshes[MESH_CUBE]);
+    game->skybox.materials[0].shader = assets->shaders[SHADER_SKYBOX];
+    SetShaderValue(
+        game->skybox.materials[0].shader,
+        GetShaderLocation(game->skybox.materials[0].shader,
+                          "environment_map"),
+        (int[1]){ MAP_CUBEMAP }, UNIFORM_INT);
+
+    Shader* cubemap_shader = &assets->shaders[SHADER_CUBEMAP];
+    SetShaderValue(*cubemap_shader, GetShaderLocation(*cubemap_shader, "equirectagular_map"), (int[1]){0}, UNIFORM_INT);
+
+    Texture2D skybox_texture = LoadTexture("resources/skybox_1.hdr");
+    game->skybox.materials[0].maps[MAP_CUBEMAP].texture = GenTextureCubemap(*cubemap_shader, skybox_texture, 512);
+
+    //UnloadTexture(skybox_texture);
+    //UnloadShader(*cubemap_shader);
 
     Map* map = load_map(0, game);
 
@@ -117,8 +142,18 @@ int main() {
         }
         
         BeginDrawing();
-            ClearBackground(BLACK);
+            ClearBackground((Color){100, 210, 255, 255});
+
+            if (IsKeyDown(KEY_TAB)) {
+                rlEnableWireMode();
+            } else {
+                rlDisableWireMode();
+            }
+
             BeginMode3D(camera);
+
+            //DrawModel(game->skybox, (Vector3){0, 0, 0}, 100.0f, WHITE);
+
                 draw_map(map, game);
 
                 for (int i = 0; i < ecs->max_num_entities; i++) {

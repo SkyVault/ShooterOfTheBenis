@@ -17,6 +17,8 @@ typedef struct {
     Assets* assets;
     Camera* camera;
     EcsWorld* ecs;
+
+    Model skybox;
 } Game;
 
 Game* create_game(Assets* assets, Camera* camera, EcsWorld* ent_world);

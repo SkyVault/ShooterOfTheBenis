@@ -14,7 +14,15 @@ Assets* create_and_load_assets() {
                       [TEX_EWW] = LoadTexture("resources/eww.png"),
                       [TEX_EWW2] = LoadTexture("resources/eww2.png") },
 
-        .shaders = { [SHADER_PHONG_LIGHTING] = LoadShader("resources/phong_vs.glsl", "resources/phong_fs.glsl") }
+        .shaders = { [SHADER_PHONG_LIGHTING] = LoadShader(
+                        "resources/phong_vs.glsl",
+                        "resources/phong_fs.glsl"),
+                     [SHADER_SKYBOX] = LoadShader(
+                        "resources/skybox_vs.glsl",
+                        "resources/skybox_fs.glsl"),
+                     [SHADER_CUBEMAP] = LoadShader(
+                         "resources/cubemap_vs.glsl",
+                         "resources/cubemap_fs.glsl"), }
     };
 
     for (int i = 0; i < TEX_NUM_TEXTURES; i++) {
