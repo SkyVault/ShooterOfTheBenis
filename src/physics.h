@@ -7,15 +7,9 @@
 #include "game.h"
 #include "ecs.h"
 #include "raylib.h"
+#include "physics_type.h"
+#include "map_def.h"
 
-typedef struct {
-    Vector3 velocity;
-
-    float friction;
-} Physics;
-
-Physics create_physics();
-
-void update_physics(EcsWorld* ecs, Game* game, EntId ent);
+void update_physics(Map* map, EcsWorld* ecs, Game* game, EntId ent);
 
 #endif//BENIS_PHYSICS_H

@@ -7,15 +7,10 @@
 #include "components.h"
 #include "ecs.h"
 #include "assets.h"
-#include "physics.h"
+#include "physics_type.h"
 #include "raylib.h"
 #include "raymath.h"
-
-#define MAX_MAP_WIDTH (100)
-#define MAX_MAP_HEIGHT (100)
-
-#define CUBE_SIZE (5)
-#define CUBE_HEIGHT (CUBE_SIZE * 2)
+#include "map_def.h"
 
 struct LvlData {
     int w, h;
@@ -37,17 +32,6 @@ static const struct LvlData map_data[] = {
              "#        #       #"
              "############ #####" }
 };
-
-typedef struct {
-    int active;
-    Model model;
-} Wall;
-
-typedef struct {
-    int current_map;
-    Wall walls[MAX_MAP_WIDTH*MAX_MAP_HEIGHT];
-    Model floor_tile_models[1];
-} Map;
 
 Map* load_map(int map, Game* game);
 

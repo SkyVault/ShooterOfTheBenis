@@ -59,10 +59,10 @@ Map* load_map(int map, Game* game) {
             };
             switch (chr) {
                 case '|':
-                    create_z_door(pos, game);
+                    //create_z_door(pos, game);
                     break;
                 case '-':
-                    create_x_door(pos, game);
+                    //create_x_door(pos, game);
                     break;
                 case '#':
                     break;

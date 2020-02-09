@@ -366,6 +366,33 @@ src/physics.c.s:
 	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/physics.c.s
 .PHONY : src/physics.c.s
 
+src/physics_type.o: src/physics_type.c.o
+
+.PHONY : src/physics_type.o
+
+# target to build an object file
+src/physics_type.c.o:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/physics_type.c.o
+.PHONY : src/physics_type.c.o
+
+src/physics_type.i: src/physics_type.c.i
+
+.PHONY : src/physics_type.i
+
+# target to preprocess a source file
+src/physics_type.c.i:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/physics_type.c.i
+.PHONY : src/physics_type.c.i
+
+src/physics_type.s: src/physics_type.c.s
+
+.PHONY : src/physics_type.s
+
+# target to generate assembly for a file
+src/physics_type.c.s:
+	$(MAKE) -f CMakeFiles/Harp.exe.dir/build.make CMakeFiles/Harp.exe.dir/src/physics_type.c.s
+.PHONY : src/physics_type.c.s
+
 src/player.o: src/player.c.o
 
 .PHONY : src/player.o
@@ -429,6 +456,9 @@ help:
 	@echo "... src/physics.o"
 	@echo "... src/physics.i"
 	@echo "... src/physics.s"
+	@echo "... src/physics_type.o"
+	@echo "... src/physics_type.i"
+	@echo "... src/physics_type.s"
 	@echo "... src/player.o"
 	@echo "... src/player.i"
 	@echo "... src/player.s"
