@@ -1,6 +1,6 @@
 #include "player.h"
 
-#define PLAYER_MOVEMENT_SENSITIVITY (8.0f)
+#define PLAYER_MOVEMENT_SENSITIVITY (2.0f)
 #define CAMERA_MOUSE_MOVE_SENSITIVITY                   0.003f
 #define CAMERA_MOUSE_SCROLL_SENSITIVITY                 1.5f
 #define CAMERA_FIRST_PERSON_MOUSE_SENSITIVITY           0.003f
@@ -106,19 +106,23 @@ void update_player(EcsWorld* ecs, Assets* ass, Camera* camera, EntId id) {
 
     previousMousePosition = mousePosition;
 
-    transform->translation.x += (sinf(CAMERA.angle.x)*direction[MOVE_BACK] -
-                            sinf(CAMERA.angle.x)*direction[MOVE_FRONT] -
-                            cosf(CAMERA.angle.x)*direction[MOVE_LEFT] +
-                            cosf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
+    // Handle collisions
+    {
+        physics->friction = 0.001f;
+        physics->velocity.x += (sinf(CAMERA.angle.x)*direction[MOVE_BACK] -
+                                sinf(CAMERA.angle.x)*direction[MOVE_FRONT] -
+                                cosf(CAMERA.angle.x)*direction[MOVE_LEFT] +
+                                cosf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
 
-    transform->translation.y += (sinf(CAMERA.angle.y)*direction[MOVE_FRONT] -
-                            sinf(CAMERA.angle.y)*direction[MOVE_BACK] +
-                            1.0f*direction[MOVE_UP] - 1.0f*direction[MOVE_DOWN])/PLAYER_MOVEMENT_SENSITIVITY;
+        physics->velocity.y += (sinf(CAMERA.angle.y)*direction[MOVE_FRONT] -
+                                sinf(CAMERA.angle.y)*direction[MOVE_BACK] +
+                                1.0f*direction[MOVE_UP] - 1.0f*direction[MOVE_DOWN])/PLAYER_MOVEMENT_SENSITIVITY;
 
-    transform->translation.z += (cosf(CAMERA.angle.x)*direction[MOVE_BACK] -
-                            cosf(CAMERA.angle.x)*direction[MOVE_FRONT] +
-                            sinf(CAMERA.angle.x)*direction[MOVE_LEFT] -
-                            sinf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
+        physics->velocity.z += (cosf(CAMERA.angle.x)*direction[MOVE_BACK] -
+                                cosf(CAMERA.angle.x)*direction[MOVE_FRONT] +
+                                sinf(CAMERA.angle.x)*direction[MOVE_LEFT] -
+                                sinf(CAMERA.angle.x)*direction[MOVE_RIGHT])/PLAYER_MOVEMENT_SENSITIVITY;
+    }
 
     bool isMoving = false;  // Required for swinging
 
